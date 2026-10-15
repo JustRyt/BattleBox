@@ -1,0 +1,6 @@
+db:
+  type: mysql # supported: mysql, mariadb, postgres, mongo
+  username: root
+  password: ""
+  port: 3306
+  database: default

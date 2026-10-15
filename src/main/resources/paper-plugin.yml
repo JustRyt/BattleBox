@@ -1,0 +1,8 @@
+name: BattleBox
+version: '$version'
+main: net.justryt.battlebox.BattleBox
+description: A minigame
+api-version: '26.3'
+loader: net.justryt.battlebox.preload.BattleBoxLoader
+prefix: BattleBox
+folia-supported: true
