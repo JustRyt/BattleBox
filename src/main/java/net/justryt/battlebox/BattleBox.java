@@ -1,6 +1,8 @@
 package net.justryt.battlebox;
 
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import lombok.Getter;
+import net.justryt.battlebox.commands.language.LanguageCommand;
 import net.justryt.battlebox.database.ConnectionCredentials;
 import net.justryt.battlebox.database.Database;
 import net.justryt.battlebox.database.implementations.MySqlDatabase;
@@ -13,10 +15,15 @@ import java.util.logging.Level;
 
 public class BattleBox extends JavaPlugin {
     @Getter
+    private static BattleBox instance;
+
+    @Getter
     private Database database;
 
     @Override
     public void onEnable() {
+        instance = this;
+
         saveDefaultConfig();
 
         if (!Messages.initialize(this)) return;
@@ -27,6 +34,10 @@ public class BattleBox extends JavaPlugin {
         UserManager.startCleanupTask(this);
 
         getServer().getPluginManager().registerEvents(new UserListener(), this);
+
+        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, handler -> {
+            handler.registrar().register(LanguageCommand.build(), LanguageCommand.getAliases());
+        });
     }
 
     @Override

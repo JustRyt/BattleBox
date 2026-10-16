@@ -139,6 +139,8 @@ public class MySqlDatabase extends Database {
     private User buildUser(@NotNull ResultSet rs) throws SQLException {
         var user = new User(UUID.fromString(rs.getString("uuid")));
 
+        user.setLanguage(rs.getString("language"));
+
         // Add other properties using the result set to the user object.
 
         return user;
@@ -147,13 +149,14 @@ public class MySqlDatabase extends Database {
     @Override
     public CompletableFuture<Void> saveUser(@NotNull User user) {
         return CompletableFuture.runAsync(() -> {
-            try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement("" +
-                    "INSERT INTO users(uuid) " +
-                    "VALUES (?) " +
+            try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO users(uuid, language) " +
+                    "VALUES (?, ?) AS new_data " +
                     "ON DUPLICATE KEY UPDATE " +
-                    "uuid = uuid;"
+                    "language = new_data.language;"
             )) {
                 statement.setString(1, user.getPlayerId().toString());
+                statement.setString(2, user.getLanguage());
 
                 statement.execute();
             } catch (SQLException e) {

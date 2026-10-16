@@ -18,7 +18,7 @@ public class UserListener implements Listener {
         try {
             UserManager.getUser(event.getUniqueId()).join();
         } catch (Exception e) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Messages.getComponent("user-load-failure-kick"));
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Messages.getComponent(Messages.getDefaultLanguage(), "user-load-failure-kick"));
         }
     }
 
